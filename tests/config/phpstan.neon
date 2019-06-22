@@ -1,0 +1,16 @@
+parameters:
+	autoload_directories:
+		- %rootDir%/../../../src/
+
+	earlyTerminatingMethodCalls:
+		Nette\Application\UI\Presenter:
+			- redirect
+			- redirectUrl
+			- sendJson
+			- sendResponse
+			- sendPayload
+	disallowFloatsEverywhere: true
+
+includes:
+	- ../../vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+	- ../../vendor/roave/no-floaters/rules.neon

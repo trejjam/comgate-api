@@ -1,0 +1,7 @@
+.idea
+
+temp
+log
+vendor
+composer.lock
+tests/**/output
