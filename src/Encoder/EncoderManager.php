@@ -33,8 +33,8 @@ final class EncoderManager
 
         $encodedValues = [];
         foreach ($properties as $property => $propertyGetter) {
-            $propertyType = $this->propertyTypeProvider->getType($contract, $property);
-            $encodedValue = $this->encodeValue($contract, $propertyGetter, $propertyType);
+            $propertyTypes = $this->propertyTypeProvider->getTypes($contract, $property);
+            $encodedValue = $this->encodeValue($contract, $propertyGetter, $propertyTypes);
 
             if ($encodedValue !== null) {
                 $encodedValues[$property] = $encodedValue;
@@ -44,7 +44,7 @@ final class EncoderManager
         return $encodedValues;
     }
 
-    private function encodeValue(object $contract, string $propertyGetter, string $propertyType) : ?string
+    private function encodeValue(object $contract, string $propertyGetter, array $propertyTypes) : ?string
     {
         $value = call_user_method($propertyGetter, $contract);
 
@@ -53,8 +53,10 @@ final class EncoderManager
         }
 
         foreach ($this->propertyEncoders as $propertyEncoder) {
-            if ($propertyEncoder->isApplicable($propertyType)) {
-                return $propertyEncoder->encode($value);
+            foreach ($propertyTypes as $propertyType) {
+                if ($propertyEncoder->isApplicable($propertyType)) {
+                    return $propertyEncoder->encode($value);
+                }
             }
         }
     }

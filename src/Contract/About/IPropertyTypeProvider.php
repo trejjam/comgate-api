@@ -5,5 +5,5 @@ namespace Trejjam\ComgateApi\Contract\About;
 
 interface IPropertyTypeProvider
 {
-    public function getType(object $contract, string $property) : string;
+    public function getTypes(object $contract, string $property) : array;
 }

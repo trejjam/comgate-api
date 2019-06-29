@@ -8,11 +8,11 @@ use Roave\BetterReflection\Reflection\ReflectionProperty;
 final class PropertyTypeProvider implements IPropertyTypeProvider
 {
     /**
-     * @var string[][]
+     * @var string[][][]
      */
     private $cache = [];
 
-    public function getType(object $contract, string $property) : string
+    public function getTypes(object $contract, string $property) : array
     {
         $cacheKey = get_class($contract);
         if (!array_key_exists($cacheKey, $this->cache)) {
@@ -24,10 +24,20 @@ final class PropertyTypeProvider implements IPropertyTypeProvider
             $type = $propertyReflection->getType();
 
             if ($type === null) {
-                throw new \RuntimeException(); // TODO own exception
+                $types = [];
+                foreach ($propertyReflection->getDocBlockTypes() as $_type) {
+                    $types[] = $_type->__toString();
+                }
+            }
+            else {
+                $types = [$type->__toString()];
             }
 
-            $this->cache[$cacheKey][$property] = $type->__toString();
+            if (count($types) === 0) {
+                throw new \RuntimeException; // TODO own exception
+            }
+
+            $this->cache[$cacheKey][$property] = $types;
         }
 
         return $this->cache[$cacheKey][$property];
