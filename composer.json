@@ -19,7 +19,10 @@
 	"require": {
 		"php": ">=7.2",
 
-		"guzzlehttp/guzzle": "^6.3"
+		"guzzlehttp/guzzle": "^6.3",
+		"brick/money": "^0.4.1",
+		"roave/better-reflection": "^3.5",
+		"doctrine/annotations": "^1.6"
 	},
 	"require-dev": {
 		"nette/tester": "^2.2",

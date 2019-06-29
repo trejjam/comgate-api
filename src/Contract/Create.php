@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Trejjam\ComgateApi\Contract;
 
+use Trejjam\ComgateApi\Annotation\Getter;
 use Trejjam\ComgateApi\Configuration\Integration;
+use Trejjam\ComgateApi\Property\Country;
 
 final class Create
 {
@@ -24,7 +26,7 @@ final class Create
     /**
      * kód země („CZ“, „SK“, „PL“, „ALL“), pokud parametr chybí, použije se „CZ“, parametr slouží k omezení výběru platebních metod na ComGate platební bráně
      *
-     * @var string|null
+     * @var Country|null
      */
     private $country;
 
@@ -40,6 +42,7 @@ final class Create
     /**
      * kód měny dle ISO 4217, standardně „CZK“
      *
+     * @Getter("getCurrency")
      * @var string
      */
     private $curr;
@@ -104,6 +107,7 @@ final class Create
     /**
      * kód jazyka (ISO 639-1), ve kterém budou Plátci zobrazeny instrukce pro dokončení platby, povolené hodnoty („cs”, „sk“, „en”), pokud parametr chybí, použije se „cs“
      *
+     * @Getter("getLanguage")
      * @var string|null
      */
     private $lang;
@@ -161,13 +165,13 @@ final class Create
     /**
      * Struktura s daty pro zaevidování platby do EET. Odpovídá parametrům ze specifikace protokolu EET. Pokud má e-shop nastaveno odesílání tržby do EET a parametr nebude vyplněn, použije se výchozí nastavení z konfigurace v Klientském Portálu.
      *
-     * @var JSON|null
+     * JSON
+     * @var object|null
      */
     private $eetData;
 
     public function __construct(
         Integration $integration,
-        string $merchant,
         int $price,
         string $curr,
         string $label,
@@ -176,11 +180,122 @@ final class Create
         string $email
     ) {
         $this->merchant = $integration->getMerchant();
+        $this->test = $integration->isTestEnvironment();
         $this->price = $price;
         $this->curr = $curr;
         $this->label = $label;
         $this->refId = $refId;
         $this->method = $method;
         $this->email = $email;
+    }
+
+    public function getMerchant() : string
+    {
+        return $this->merchant;
+    }
+
+    public function getTest() : ?bool
+    {
+        return $this->test;
+    }
+
+    public function getCountry() : ?Country
+    {
+        return $this->country;
+    }
+
+    public function getPrice() : int
+    {
+        return $this->price;
+    }
+
+    public function getCurrency() : string
+    {
+        return $this->curr;
+    }
+
+    public function getLabel() : string
+    {
+        return $this->label;
+    }
+
+    public function getRefId() : string
+    {
+        return $this->refId;
+    }
+
+    public function getPayerId() : ?string
+    {
+        return $this->payerId;
+    }
+
+    public function getMethod() : string
+    {
+        return $this->method;
+    }
+
+    public function getAccount() : ?string
+    {
+        return $this->account;
+    }
+
+    public function getEmail() : string
+    {
+        return $this->email;
+    }
+
+    public function getPhone() : ?string
+    {
+        return $this->phone;
+    }
+
+    public function getName() : ?string
+    {
+        return $this->name;
+    }
+
+    public function getLanguage() : ?string
+    {
+        return $this->lang;
+    }
+
+    public function getPrepareOnly() : ?bool
+    {
+        return $this->prepareOnly;
+    }
+
+    public function getSecret() : ?string
+    {
+        return $this->secret;
+    }
+
+    public function getPreauth() : ?bool
+    {
+        return $this->preauth;
+    }
+
+    public function getInitRecurring() : ?bool
+    {
+        return $this->initRecurring;
+    }
+
+    public function getVerification() : ?bool
+    {
+        return $this->verification;
+    }
+
+    public function getEmbedded() : ?bool
+    {
+        return $this->embedded;
+    }
+
+    public function getEetReport() : ?bool
+    {
+        return $this->eetReport;
+    }
+
+    public function getEetData() : ?object
+    {
+        return $this->eetData;
     }
 }

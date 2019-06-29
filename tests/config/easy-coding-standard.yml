@@ -30,6 +30,7 @@ parameters:
     PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures\ControlSignatureSniff.SpaceAfterCloseBrace: ~
     PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~
     PhpCsFixer\Fixer\Basic\BracesFixer: ~
+    PhpCsFixer\Fixer\Operator\NewWithBracesFixer: ~
 
     SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff: ~
     PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer: ~
