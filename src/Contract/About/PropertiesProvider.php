@@ -35,15 +35,16 @@ final class PropertiesProvider implements IPropertiesProvider
             foreach ($reflectionClass->getProperties(
                 ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
             ) as $reflectionProperty) {
-                $getter = 'get' . ucfirst($reflectionProperty->getName());
-
                 /** @var Getter|null $getterAnnotation */
                 $getterAnnotation = $this->annotationReader->getPropertyAnnotation(
                     $reflectionProperty,
                     Getter::class
                 );
 
-                if ($getterAnnotation !== null) {
+                if ($getterAnnotation === null) {
+                    $getter = 'get' . ucfirst($reflectionProperty->getName());
+                }
+                else {
                     $getter = $getterAnnotation->getterName;
                 }
 
