@@ -2,7 +2,7 @@ language: php
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
+#  - 7.4snapshot
 
 before_install:
   # Turn off XDebug
@@ -19,10 +19,6 @@ script:
 after_failure:
   # Print *.actual content
   - for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
-
-matrix:
-  allow_failures:
-    - php: 7.4snapshot
 
 jobs:
   include:
