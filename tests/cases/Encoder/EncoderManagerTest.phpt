@@ -16,6 +16,9 @@ use Trejjam\ComgateApi\Encoder\BoolEncoder;
 use Trejjam\ComgateApi\Encoder\EncoderManager;
 use Trejjam\ComgateApi\Encoder\IntEncoder;
 use Trejjam\ComgateApi\Encoder\PropertyEncoder;
+use Trejjam\ComgateApi\Property\Country;
+use Trejjam\ComgateApi\Property\Language;
+use Trejjam\ComgateApi\Property\ResponseType;
 use Trejjam\ComgateApi\Tests\AnnotationHelper;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -78,6 +81,31 @@ class EncoderManagerTest extends Tester\TestCase
             [
                 'merchant' => '<merchant>',
                 'secret'   => '<secret>',
+            ],
+            $encodedContract
+        );
+    }
+
+    public function testFullMethodContract()
+    {
+        $method = $this->createMethodContract();
+
+        $method
+            ->setType(ResponseType::JSON())
+            ->setLanguage(Language::CS())
+            ->setCurrency('CZK')
+            ->setCountry(Country::CZ());
+
+        $encodedContract = $this->encoderManager->encode($method);
+
+        Assert::same(
+            [
+                'merchant' => '<merchant>',
+                'secret'   => '<secret>',
+                'type'     => 'json',
+                'lang'     => 'cs',
+                'curr'     => 'CZK',
+                'country'  => 'CZ',
             ],
             $encodedContract
         );

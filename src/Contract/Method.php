@@ -106,6 +106,8 @@ final class Method
 
     public function setCurrency(?string $curr) : self
     {
+        //TODO validate currency?
+
         $this->curr = $curr;
         return $this;
     }
