@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Trejjam\ComgateApi\Encoder;
 
+use Closure;
 use Trejjam\ComgateApi\Contract\About\IPropertiesProvider;
 use Trejjam\ComgateApi\Contract\About\IPropertyTypeProvider;
+use function Safe\sprintf;
 
 final class EncoderManager
 {
@@ -21,7 +23,21 @@ final class EncoderManager
     /**
      * @var IPropertyEncoder[]
      */
-    private $propertyEncoders = [];
+    private $propertyEncoders;
+
+    /**
+     * @param IPropertyEncoder[] $propertyEncoders
+     */
+    public function __construct(
+        IPropertiesProvider $propertiesProvider,
+        IPropertyTypeProvider $propertyTypeProvider,
+        array $propertyEncoders
+    ) {
+        $this->propertiesProvider = $propertiesProvider;
+        $this->propertyTypeProvider = $propertyTypeProvider;
+        $this->propertyEncoders = $propertyEncoders;
+    }
+
 
     /**
      * @param object $contract
@@ -46,7 +62,7 @@ final class EncoderManager
 
     private function encodeValue(object $contract, string $propertyGetter, array $propertyTypes) : ?string
     {
-        $value = call_user_method($propertyGetter, $contract);
+        $value = Closure::fromCallable([$contract, $propertyGetter])->call($contract);
 
         if ($value === null) {
             return $value;
@@ -59,5 +75,11 @@ final class EncoderManager
                 }
             }
         }
+
+        if (is_string($value)) {
+            return $value;
+        }
+
+        throw new \RuntimeException(sprintf("Unable to encode value from %s of type %s", $propertyGetter, implode(' | ', $propertyTypes)));
     }
 }
